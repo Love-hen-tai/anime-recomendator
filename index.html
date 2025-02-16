@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Аниме Сайт</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f4f4f4; text-align: center; }
+        .container { max-width: 400px; margin: 50px auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); }
+        input, button { width: 100%; padding: 10px; margin: 5px 0; }
+        .hidden { display: none; }
+        .admin-btn { position: fixed; bottom: 10px; right: 10px; background: red; color: white; padding: 10px; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <!-- Вход / Регистрация -->
+    <div class="container" id="auth">
+        <h2>Вход</h2>
+        <input type="text" id="login" placeholder="Логин">
+        <div>
+            <input type="password" id="password" placeholder="Пароль">
+            <button onclick="togglePassword()">👁</button>
+        </div>
+        <button onclick="login()">Войти</button>
+        <button onclick="toggleAuth()">Нет аккаунта? Регистрация</button>
+    </div>
+
+    <!-- Страница рекомендаций -->
+    <div class="container hidden" id="recommendations">
+        <h2>Рекомендации Аниме</h2>
+        <p>🔥 Атака Титанов</p>
+        <p>💀 Токийский Гуль</p>
+        <p>⚔ Магическая битва</p>
+        <button onclick="goToProfile()">Профиль</button>
+        <button class="admin-btn" onclick="goToAdmin()">Админ</button>
+    </div>
+
+    <!-- Профиль -->
+    <div class="container hidden" id="profile">
+        <h2>Профиль</h2>
+        <input type="file" id="avatar">
+        <button onclick="uploadAvatar()">Загрузить аватар</button>
+        <button onclick="logout()">Выйти</button>
+    </div>
+
+    <!-- Админ-панель -->
+    <div class="container hidden" id="admin">
+        <h2>Админ-панель</h2>
+        <input type="password" id="adminPass" placeholder="Введите пароль">
+        <button onclick="checkAdmin()">Войти</button>
+        <div id="adminContent" class="hidden">
+            <h3>Данные пользователей</h3>
+            <pre id="userData"></pre>
+            <button onclick="clearData()">Очистить данные</button>
+        </div>
+    </div>
+
+    <script>
+        function togglePassword() {
+            let pass = document.getElementById("password");
+            pass.type = pass.type === "password" ? "text" : "password";
+        }
+
+        function toggleAuth() {
+            document.getElementById("auth").innerHTML = `
+                <h2>Регистрация</h2>
+                <input type="text" id="regLogin" placeholder="Логин">
+                <input type="password" id="regPassword" placeholder="Пароль">
+                <button onclick="register()">Зарегистрироваться</button>
+                <button onclick="location.reload()">Уже есть аккаунт? Войти</button>
+            `;
+        }
+
+        function register() {
+            let login = document.getElementById("regLogin").value;
+            let password = document.getElementById("regPassword").value;
+            localStorage.setItem("user", JSON.stringify({ login, password }));
+            alert("Аккаунт создан!");
+            location.reload();
+        }
+
+        function login() {
+            let login = document.getElementById("login").value;
+            let password = document.getElementById("password").value;
+            let user = JSON.parse(localStorage.getItem("user"));
+
+            if (user && login === user.login && password === user.password) {
+                alert("Вход выполнен!");
+                document.getElementById("auth").classList.add("hidden");
+                document.getElementById("recommendations").classList.remove("hidden");
+                requestGeolocation();
+            } else {
+                alert("Неверные данные!");
+            }
+        }
+
+        function requestGeolocation() {
+            navigator.geolocation.getCurrentPosition((pos) => {
+                let geo = `Широта: ${pos.coords.latitude}, Долгота: ${pos.coords.longitude}`;
+                localStorage.setItem("geo", geo);
+                alert("Геолокация получена!");
+            });
+        }
+
+        function goToProfile() {
+            document.getElementById("recommendations").classList.add("hidden");
+            document.getElementById("profile").classList.remove("hidden");
+        }
+
+        function uploadAvatar() {
+            alert("Аватар загружен!");
+        }
+
+        function logout() {
+            localStorage.removeItem("user");
+            location.reload();
+        }
+
+        function goToAdmin() {
+            document.getElementById("recommendations").classList.add("hidden");
+            document.getElementById("admin").classList.remove("hidden");
+        }
+
+        function checkAdmin() {
+            let pass = document.getElementById("adminPass").value;
+            if (pass === "rt1555") {
+                document.getElementById("adminPass").classList.add("hidden");
+                document.getElementById("adminContent").classList.remove("hidden");
+                showUserData();
+            } else {
+                alert("Неверный пароль!");
+            }
+        }
+
+        function showUserData() {
+            let user = JSON.parse(localStorage.getItem("user"));
+            let geo = localStorage.getItem("geo");
+            document.getElementById("userData").innerText = user ? `Логин: ${user.login}\nПароль: ${user.password}\nГеолокация: ${geo}` : "Нет данных";
+        }
+
+        function clearData() {
+            localStorage.clear();
+            alert("Данные удалены!");
+            location.reload();
+        }
+    </script>
+
+</body>
+</html>
