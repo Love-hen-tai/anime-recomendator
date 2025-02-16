@@ -3,152 +3,99 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Аниме Сайт</title>
+    <title>Вход / Регистрация</title>
+    <link rel="stylesheet" href="styles.css">
+    <script defer src="script.js"></script>
     <style>
-        body { font-family: Arial, sans-serif; background: linear-gradient(45deg, #ff9a9e, #fad0c4); text-align: center; margin: 0; }
-        .container { max-width: 400px; margin: 50px auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); }
-        input, button { width: 100%; padding: 12px; margin: 6px 0; border: none; border-radius: 5px; }
-        input { border: 1px solid #ddd; }
-        button { background: #ff7eb3; color: white; font-weight: bold; cursor: pointer; transition: 0.3s; }
-        button:hover { background: #ff5277; }
-        .hidden { display: none; }
-        .admin-btn { position: fixed; bottom: 10px; right: 10px; background: red; color: white; padding: 8px; border-radius: 50%; font-size: 12px; cursor: pointer; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3); }
-        .anime-list p { background: #fff; padding: 10px; margin: 5px; border-radius: 5px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); }
+        /* Устанавливаем градиентный фон страницы */
+        body {
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+        }
+        
+        /* Стилизация контейнера формы */
+        .page {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1); /* Полупрозрачный фон */
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Тень для эффекта объема */
+        }
+        
+        /* Стили для полей ввода */
+        input {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 10px;
+            border: 1px solid #fff;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+        
+        /* Цвет плейсхолдера (подсказки в полях ввода) */
+        input::placeholder {
+            color: white;
+        }
+        
+        /* Контейнер для поля пароля и кнопки показа пароля */
+        .password-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Кнопка "Показать пароль" */
+        #togglePassword {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 20px;
+            margin-left: 10px;
+            color: white;
+        }
+        
+        /* Общие стили для кнопок */
+        button {
+            background-color: red;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 10px;
+            transition: background 0.3s ease;
+            width: 100%;
+        }
+        
+        /* Эффект затемнения кнопки при наведении */
+        button:hover {
+            background-color: darkred;
+        }
     </style>
 </head>
 <body>
-
-    <!-- Вход / Регистрация -->
-    <div class="container" id="auth">
-        <h2>Вход</h2>
-        <input type="text" id="login" placeholder="Логин">
-        <div>
-            <input type="password" id="password" placeholder="Пароль">
-            <button onclick="togglePassword()">👁</button>
+    <div id="login-page" class="page">
+        <h2>Вход / Регистрация</h2>
+        
+        <!-- Поле ввода имени пользователя -->
+        <input type="text" id="username" placeholder="Имя пользователя" required>
+        
+        <!-- Поле пароля с кнопкой показа/скрытия пароля -->
+        <div class="password-container">
+            <input type="password" id="password" placeholder="Пароль" required>
+            <button id="togglePassword">👁</button>
         </div>
-        <button onclick="login()">Войти</button>
-        <button onclick="toggleAuth()">Нет аккаунта? Регистрация</button>
+        
+        <!-- Кнопки входа и регистрации -->
+        <button onclick="loginUser()">Войти</button>
+        <button onclick="registerUser()">Регистрация</button>
     </div>
-
-    <!-- Страница рекомендаций -->
-    <div class="container hidden" id="recommendations">
-        <h2>Рекомендации Аниме</h2>
-        <div class="anime-list">
-            <p>🔥 Атака Титанов</p>
-            <p>💀 Токийский Гуль</p>
-            <p>⚔ Магическая битва</p>
-        </div>
-        <button onclick="goToProfile()">Профиль</button>
-        <button class="admin-btn" onclick="goToAdmin()">⚡</button>
-    </div>
-
-    <!-- Профиль -->
-    <div class="container hidden" id="profile">
-        <h2>Профиль</h2>
-        <input type="file" id="avatar">
-        <button onclick="uploadAvatar()">Загрузить аватар</button>
-        <button onclick="logout()">Выйти</button>
-    </div>
-
-    <!-- Админ-панель -->
-    <div class="container hidden" id="admin">
-        <h2>Админ-панель</h2>
-        <input type="password" id="adminPass" placeholder="Введите пароль">
-        <button onclick="checkAdmin()">Войти</button>
-        <div id="adminContent" class="hidden">
-            <h3>Данные пользователей</h3>
-            <pre id="userData"></pre>
-            <button onclick="clearData()">Очистить данные</button>
-        </div>
-    </div>
-
-    <script>
-        function togglePassword() {
-            let pass = document.getElementById("password");
-            pass.type = pass.type === "password" ? "text" : "password";
-        }
-
-        function toggleAuth() {
-            document.getElementById("auth").innerHTML = `
-                <h2>Регистрация</h2>
-                <input type="text" id="regLogin" placeholder="Логин">
-                <input type="password" id="regPassword" placeholder="Пароль">
-                <button onclick="register()">Зарегистрироваться</button>
-                <button onclick="location.reload()">Уже есть аккаунт? Войти</button>
-            `;
-        }
-
-        function register() {
-            let login = document.getElementById("regLogin").value;
-            let password = document.getElementById("regPassword").value;
-            localStorage.setItem("user", JSON.stringify({ login, password }));
-            alert("Аккаунт создан!");
-            location.reload();
-        }
-
-        function login() {
-            let login = document.getElementById("login").value;
-            let password = document.getElementById("password").value;
-            let user = JSON.parse(localStorage.getItem("user"));
-
-            if (user && login === user.login && password === user.password) {
-                document.getElementById("auth").classList.add("hidden");
-                document.getElementById("recommendations").classList.remove("hidden");
-                requestGeolocation();
-            } else {
-                alert("Неверные данные!");
-            }
-        }
-
-        function requestGeolocation() {
-            navigator.geolocation.getCurrentPosition((pos) => {
-                let geo = `Широта: ${pos.coords.latitude}, Долгота: ${pos.coords.longitude}`;
-                localStorage.setItem("geo", geo);
-            });
-        }
-
-        function goToProfile() {
-            document.getElementById("recommendations").classList.add("hidden");
-            document.getElementById("profile").classList.remove("hidden");
-        }
-
-        function uploadAvatar() {
-            alert("Аватар загружен!");
-        }
-
-        function logout() {
-            localStorage.removeItem("user");
-            location.reload();
-        }
-
-        function goToAdmin() {
-            document.getElementById("recommendations").classList.add("hidden");
-            document.getElementById("admin").classList.remove("hidden");
-        }
-
-        function checkAdmin() {
-            let pass = document.getElementById("adminPass").value;
-            if (pass === "rt1555") {
-                document.getElementById("adminPass").classList.add("hidden");
-                document.getElementById("adminContent").classList.remove("hidden");
-                showUserData();
-            } else {
-                alert("Неверный пароль!");
-            }
-        }
-
-        function showUserData() {
-            let user = JSON.parse(localStorage.getItem("user"));
-            let geo = localStorage.getItem("geo");
-            document.getElementById("userData").innerText = user ? `Логин: ${user.login}\nПароль: ${user.password}\nГеолокация: ${geo}` : "Нет данных";
-        }
-
-        function clearData() {
-            localStorage.clear();
-            alert("Данные удалены!");
-            location.reload();
-        }
-    </script>
-
 </body>
 </html>
