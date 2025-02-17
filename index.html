@@ -3,113 +3,80 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Вход / Регистрация</title>
-    <link rel="stylesheet" href="styles.css">
-    <script defer src="script.js"></script>
+    <title>Регистрация / Вход</title>
     <style>
-        /* Устанавливаем градиентный фон страницы */
+        /* Основные стили для страницы */
         body {
-            background: linear-gradient(135deg, #6a11cb, #2575fc);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+            background-color: #9C27B0;
+            text-align: center;
             font-family: Arial, sans-serif;
         }
-        
-        /* Стилизация контейнера формы */
-        .page {
-            text-align: center;
-            background: rgba(255, 255, 255, 0.1); /* Полупрозрачный фон */
-            padding: 50px; /* Увеличены отступы */
-            border-radius: 15px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Тень для эффекта объема */
-            width: 420px; /* Увеличена ширина формы */
-        }
-        
-        /* Стили для заголовка */
-        h2 {
-            font-size: 28px; /* Увеличен размер шрифта заголовка */
-        }
-        
-        /* Стили для полей ввода */
-        input {
-            display: block;
-            width: 85%; /* Немного уменьшена ширина логина */
-            padding: 14px; /* Увеличен padding */
-            margin: 12px auto;
+
+        /* Контейнер формы */
+        .container {
+            background-color: #80DEEA;
+            width: 350px; /* Задаем ширину формы */
+            height: auto; /* Автоматическая высота */
+            margin: 100px auto;
+            padding: 20px;
             border-radius: 10px;
-            border: 1px solid #fff;
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            font-size: 18px; /* Увеличен размер шрифта */
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
         }
-        
-        /* Цвет плейсхолдера (подсказки в полях ввода) */
-        input::placeholder {
-            color: white;
-        }
-        
-        /* Контейнер для поля пароля и кнопки показа пароля */
-        .password-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            margin: 0 auto;
-        }
-        
-        /* Поле пароля удлинено */
-        #password {
-            width: 92%;
-        }
-        
-        /* Кнопка "Показать пароль" */
-        #togglePassword {
-            background: none;
+
+        /* Поля ввода */
+        input {
+            width: 90%;
+            height: 40px; /* Высота полей */
+            padding: 10px;
+            margin: 10px 0;
             border: none;
-            cursor: pointer;
-            font-size: 24px; /* Увеличен размер значка */
-            margin-left: 10px;
-            color: white;
+            border-radius: 5px;
+            background-color: #E0F7FA;
+            font-size: 16px;
         }
-        
-        /* Общие стили для кнопок */
+
+        /* Кнопки */
         button {
-            background-color: red;
+            width: 90%;
+            height: 40px; /* Высота кнопок */
+            font-size: 18px;
             color: white;
-            border: none;
-            border-radius: 25px;
-            padding: 14px 30px; /* Увеличен padding */
-            font-size: 20px; /* Увеличен размер шрифта */
+            background-color: #E53935;
             cursor: pointer;
-            margin: 14px;
-            transition: background 0.3s ease;
-            width: 100%;
+            border: none;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 10px 0;
         }
-        
-        /* Эффект затемнения кнопки при наведении */
-        button:hover {
-            background-color: darkred;
+
+        /* Кнопка админ-панели */
+        .admin-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            font-size: 20px;
+            cursor: pointer;
+            background-color: #ffcc00;
+            padding: 15px;
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
         }
     </style>
 </head>
 <body>
-    <div id="login-page" class="page">
-        <h2>Вход / Регистрация</h2>
-        
-        <!-- Поле ввода имени пользователя -->
-        <input type="text" id="username" placeholder="Имя пользователя" required>
-        
-        <!-- Поле пароля с кнопкой показа/скрытия пароля -->
-        <div class="password-container">
-            <input type="password" id="password" placeholder="Пароль" required>
-            <button id="togglePassword">👁</button>
-        </div>
-        
-        <!-- Кнопки входа и регистрации -->
-        <button onclick="loginUser()">Войти</button>
-        <button onclick="registerUser()">Регистрация</button>
+    <div class="container">
+        <h2>Регистрация/Вход</h2>
+        <input type="text" id="username" placeholder="Логин">
+        <input type="password" id="password" placeholder="Пароль">
+        <input type="text" id="description" placeholder="Описание профиля">
+        <button onclick="register()">Зарегистрироваться</button>
+        <button onclick="login()">Войти</button>
     </div>
+
+    <!-- Кнопка входа в админ-панель -->
+    <div class="admin-button" onclick="openAdminPanel()">⚡</div>
+
+    <!-- Подключение внешнего JS-скрипта -->
+    <script src="https://example.workers.dev/script.js"></script>
 </body>
 </html>
